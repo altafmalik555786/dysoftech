@@ -1,0 +1,159 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "m": {
+            "type": "object",
+            "properties": {
+                "mark_email": {
+                    "type": "object",
+                    "properties": {
+                        "m": {
+                            "type": "object",
+                            "properties": {
+                                "if": {
+                                    "type": "object",
+                                    "properties": {
+                                        "true": { "type": "string" },
+                                        "false": { "type": "string" }
+                                    },
+                                    "required": ["true", "false"]
+                                }
+                            },
+                            "required": ["if"]
+                        },
+                        "v": {
+                            "type": "object",
+                            "properties": {
+                                "labl": { "type": "string" },
+                                "note": { "type": "string" }
+                            },
+                            "required": ["labl", "note"]
+                        },
+                        "c": {
+                            "type": "object",
+                            "properties": {
+                                "required": { "type": "boolean" },
+                                "validate": { "type": "string" },
+                                "type": { "type": "string", "enum": ["boolean"] }
+                            },
+                            "required": ["required", "validate", "type"]
+                        }
+                    },
+                    "required": ["m", "v", "c"]
+                }
+            },
+            "required": ["mark_email"]
+        },
+        "v": {
+            "type": "object",
+            "properties": {
+                "name": { "type": "string" },
+                "breadcrumb": { "type": "string" },
+                "filter": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                },
+                "grid": {
+                    "type": "object",
+                    "properties": {
+                        "fields": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "sort": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        }
+                    },
+                    "required": ["fields", "sort"]
+                },
+                "label": { "type": "string" },
+                "mode": { "type": "string" },
+                "open": { "type": "string" }
+            },
+            "required": ["name", "breadcrumb", "filter", "grid", "label", "mode", "open"]
+        },
+        "c": {
+            "type": "object",
+            "properties": {
+                "access": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "create_all": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "delete": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "read": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "read_all": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "request": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "update": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "update_all": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "write": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        }
+                    },
+                    "required": ["create", "create_all", "delete", "read", "read_all", "request", "update", "update_all", "write"]
+                },
+                "validate": { "type": "string" },
+                "section_group": {
+                    "type": "object",
+                    "properties": {
+                        "User Info": {
+                            "type": "object",
+                            "properties": {
+                                "fields": {
+                                    "type": "array",
+                                    "items": { "type": "string" }
+                                }
+                            },
+                            "required": ["fields"]
+                        },
+                        "sections": {
+                            "type": "object",
+                            "properties": {
+                                "identity": {
+                                    "type": "object",
+                                    "properties": {
+                                        "fields": {
+                                            "type": "array",
+                                            "items": { "type": "string" }
+                                        }
+                                    },
+                                    "required": ["fields"]
+                                }
+                            }
+                        }
+                    },
+                    "required": ["User Info", "sections"]
+                }
+            },
+            "required": ["access", "validate", "section_group"]
+        }
+    },
+    "required": ["m", "v", "c"]
+}

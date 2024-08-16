@@ -1,0 +1,113 @@
+{
+    "m": {
+        "mark_email": {
+            "m": {
+                "if": {
+                    "true": "Business",
+                    "false": "Personalo"
+                }
+            },
+            "v": {
+                "labl": "Mark Your email",
+                "note": "confirm Citizen"
+            },
+            "c": {
+                "required": true,
+                "validate": "run_validator_func",
+                "type": "boolean"
+            }
+        }
+    },
+    "v": {
+        "name": "User",
+        "breadcrumb": "Manage > User",
+        "filter": [
+            "name",
+            "fdb_id",
+            "type",
+            "ndc",
+            "hcpc_id"
+        ],
+        "grid": {
+            "fields": [
+                "name",
+                "type",
+                "ndc",
+                "hcpc_id"
+            ],
+            "sort": [
+                "name"
+            ]
+        },
+        "label": "Inventory Item",
+        "mode": "read",
+        "open": "drawer"
+    },
+    "c": {
+        "access": {
+            "create": [],
+            "create_all": [
+                "admin",
+                "pharm"
+            ],
+            "delete": [
+                "admin",
+                "pharm"
+            ],
+            "read": [
+                "admin",
+                "cm",
+                "cma",
+                "csr",
+                "liaison",
+                "nurse",
+                "patient",
+                "pharm",
+                "physician"
+            ],
+            "read_all": [
+                "admin",
+                "cm",
+                "cma",
+                "csr",
+                "liaison",
+                "nurse",
+                "patient",
+                "pharm",
+                "physician"
+            ],
+            "request": [
+                "csr"
+            ],
+            "update": [],
+            "update_all": [
+                "admin",
+                "csr",
+                "pharm"
+            ],
+            "write": [
+                "admin",
+                "pharm"
+            ]
+        },
+        "validate": "run_my_func",
+        "section_group": {
+            "User Info": {
+                "fields": [
+                    "mark_email",
+                    "first_name",
+                    "last_name"
+                ],
+            },
+            "sections": {
+                "identity": {
+                    "fields": [
+                        "mark_email",
+                        "idcard_no",
+                        "passport_no"
+                    ]
+                }
+            }
+        }
+    }
+}
