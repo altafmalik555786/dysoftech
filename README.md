@@ -1,13 +1,12 @@
 **Root Directory**
   
   View: Frontend
-  
   Model: Backend
-  
   Controller: JSON DSL
   
 
 **Controller: JSON DSL**  
+
 
   -> JSON -> form_name.json
   
