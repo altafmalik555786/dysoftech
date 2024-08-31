@@ -1,7 +1,30 @@
 # Project Structure Overview
 
+Root Directory
+│
+├── Model: Backend
+│
+├── View: Frontend
+│
+└── Controller: JSON DSL
+    │
+    └── form_name
+        │
+        ├── m: form's model
+        │   └── field's name
+        │       ├── m: fields model
+        │       ├── v: fields view
+        │       └── c: fields controller functions
+        │
+        ├── v: form's view
+        │
+        └── c: form's controller functions
+
+
 This project is organized into three main components: Frontend (View), Backend (Model), and a custom JSON DSL (Controller) that defines the logic, structure, and behavior of the application.
 
+
+## Describing in detail below
 ## Root Directory Structure
 
 ```plaintext
