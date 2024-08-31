@@ -20,11 +20,12 @@ Root Directory
         ├── v: form's view
         │
         └── c: form's controller functions
-
+```
 
 
 ## Describing in detail below
 ## Root Directory Structure
+
 
 ```plaintext
 Root Directory
