@@ -1,5 +1,6 @@
 # Project Structure Overview
 
+```plaintext
 Root Directory
 │
 ├── Model: Backend
