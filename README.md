@@ -21,8 +21,6 @@ Root Directory
         └── c: form's controller functions
 
 
-This project is organized into three main components: Frontend (View), Backend (Model), and a custom JSON DSL (Controller) that defines the logic, structure, and behavior of the application.
-
 
 ## Describing in detail below
 ## Root Directory Structure
