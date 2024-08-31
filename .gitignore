@@ -1,0 +1,6 @@
+# Ignore .env files
+./model/.env
+
+# Ignore node_modules directories
+./model/node_modules
+./view/node_modules
