@@ -1,11 +1,10 @@
-const { Client } = require('pg');
-const cloudinary = require('cloudinary').v2;
-const mongoString = process.env.DATABASE_URL;
+const { ApolloServer, gql } = require('apollo-server');
+const { Client } = require("pg");
+const cloudinary = require("cloudinary").v2;
 const eventListnerFunction = require("./utils/helper/emitters/event-listner");
 
 const config = () => {
-
-    // MongoDB Connection
+    // DB Connection
     const client = new Client({
         user: process.env.DATABASE_USER,
         host: process.env.DATABASE_HOST,
@@ -14,45 +13,51 @@ const config = () => {
         port: process.env.DATABASE_PORT,
     });
 
-    client.connect()
-        .then(() => {
-            console.log("Connected to PostgreSQL database!");
+    client.connect();
 
-            // Execute a query (create a table as an example)
-            return client.query(`
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(100),
-        email VARCHAR(100) UNIQUE
-      );
-    `);
-        })
-        .then(() => {
-            console.log("Table created!");
+    const typeDefs = gql`
+    type User {
+      id: ID!
+      name: String!
+      email: String!
+    }
 
-            // Insert a sample user into the table
-            return client.query(`
-      INSERT INTO users (name, email)
-      VALUES ('John Doe', 'john.doe@example.com')
-      RETURNING *;
-    `);
-        })
-        .then((res) => {
-            console.log("Inserted user:", res.rows[0]);
+    type Query {
+      users: [User]
+    }
 
-            // Query the table to get all users
-            return client.query('SELECT * FROM users;');
-        })
-        .then((res) => {
-            console.log("All users:", res.rows);
+    type Mutation {
+      createUser(name: String!, email: String!): User
+    }
+  `;
 
-            // Close the database connection
-            client.end();
-        })
-        .catch((err) => {
-            console.error("Error executing query:", err.stack);
-            client.end();
-        });
+    const resolvers = {
+        Query: {
+            users: async () => {
+                const res = await client.query("SELECT * FROM users;");
+                return res.rows;
+            },
+        },
+        Mutation: {
+            createUser: async (_, { name, email }) => {
+                const res = await client.query(
+                    `
+            INSERT INTO users (name, email)
+            VALUES ($1, $2)
+            RETURNING *;
+        `,
+                    [name, email]
+                );
+                return res.rows[0];
+            },
+        },
+    };
+
+    const server = new ApolloServer({ typeDefs, resolvers });
+
+    server.listen().then(({ url }) => {
+        console.log(`Server ready at ${url}`);
+    });
 
     // Cloudinary Files
     cloudinary.config({
@@ -71,11 +76,8 @@ const config = () => {
         console.error("Uncaught Exception:", err);
     });
 
-
     // This file has been imported to listen the events
-    eventListnerFunction()
+    eventListnerFunction();
+};
 
-
-}
-
-module.exports = config
+module.exports = config;

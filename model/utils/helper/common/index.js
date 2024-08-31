@@ -1,4 +1,3 @@
-const { response } = require('express');
 const { ERROR_INVALID_ID, ERROR_RECORD_NOT_FOUND, ERROR_SERVER_ERROR, CON_IDENTITY } = require('../../const');
 const { statusCodes } = require('../../json');
 const { sendFailureResponse } = require('../emitters/event-creator');
