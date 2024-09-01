@@ -4,3 +4,14 @@
 # Ignore node_modules directories
 ./model/node_modules
 ./view/node_modules
+
+
+# Ignore logs
+logs
+./model/*.log
+./model/npm-debug.log*
+./model/yarn-debug.log*
+./model/yarn-error.log*
+
+# Ignore the database
+./model/*.sqlite
