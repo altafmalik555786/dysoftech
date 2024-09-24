@@ -1,9 +1,3 @@
-const { sendFailureResponse } = require("../../utils/helper/api");
-const { baseUrl } = require("../const");
-const bodyParser = require("body-parser");
-const fileUpload = require("express-fileupload");
-const cors = require("cors");
-const { app, router } = require("../../utils/instances");
 const { UserRouter } = require("../users");
 const { AuthRouter } = require("../auth");
 const { postsRouter } = require("../posts");
