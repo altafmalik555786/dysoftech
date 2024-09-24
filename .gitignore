@@ -1,17 +1,15 @@
 # Ignore .env files
-./model/.env
+*.env
 
 # Ignore node_modules directories
-./model/node_modules
-./view/node_modules
-
+**/node_modules/
 
 # Ignore logs
-logs
-./model/*.log
-./model/npm-debug.log*
-./model/yarn-debug.log*
-./model/yarn-error.log*
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Ignore the database
-./model/*.sqlite
+*.sqlite
