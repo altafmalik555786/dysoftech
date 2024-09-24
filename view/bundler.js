@@ -1,58 +1,70 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
+const babel = require('@babel/core');
+const Terser = require('terser');
 
-function bundle(entry) {
-    const graph = buildDependencyGraph(entry);
-    let bundledCode = "";
-    for (const [file, dependencies] of Object.entries(graph)) {
-        const content = fs.readFileSync(file, "utf-8");
-        bundledCode += wrapInFunction(content) + "\n";
-    }
-    writeToFile(bundledCode);
-}
-function wrapInFunction(content) {
-    return `(function() {
-        ${content}
-    })();`;
-}
-function writeToFile(content) {
-    const outputPath = path.resolve(__dirname, "bundle.js");
-    fs.writeFileSync(outputPath, content, "utf-8");
-    console.log(`Bundle created at ${outputPath}`);
-}
-function resolveDependencies(content) {
+const config = require('./bundler.config.js');
+
+function resolveDependencies(content, filePath) {
     const regex = /require\(['"](.+?)['"]\)/g;
     let match;
     const dependencies = [];
+
     while ((match = regex.exec(content))) {
-        dependencies.push(match[1]);
+        dependencies.push(path.resolve(path.dirname(filePath), match[1]));
     }
+
     return dependencies;
 }
-function buildDependencyGraph(entry) {
-    const graph = {};
-    const queue = [entry];
-    while (queue.length) {
-        const current = queue.shift();
-        const content = fs.readFileSync(current, "utf-8");
-        const dependencies = resolveDependencies(content);
 
-        graph[current] = dependencies.map((dep) =>
-            path.resolve(path.dirname(current), dep)
-        );
+async function bundle(entry) {
+    const content = fs.readFileSync(entry, 'utf-8');
+    const dependencies = resolveDependencies(content, entry);
+    
+    const transformed = babel.transformSync(content, {
+        filename: entry,
+        presets: config.babel.presets,
+        plugins: config.babel.plugins,
+    });
 
-        dependencies.forEach((dep) => {
-            const resolvedPath = path.resolve(path.dirname(current), dep);
-            if (!graph[resolvedPath]) {
-                queue.push(resolvedPath);
-            }
+    let bundleCode = transformed.code;
+
+    for (const dep of dependencies) {
+        const depCode = fs.readFileSync(dep, 'utf-8');
+        const transformedDep = babel.transformSync(depCode, {
+            filename: dep,
+            presets: config.babel.presets,
+            plugins: config.babel.plugins,
         });
+        bundleCode += `\n${transformedDep.code}`;
     }
-    return graph;
+
+    if (config.minify.enabled) {
+        const minified = await Terser.minify(bundleCode, config.minify.options);
+        bundleCode = minified.code;
+    }
+
+    fs.writeFileSync(path.resolve(config.output.path, config.output.filename), bundleCode);
+    console.log('Bundling completed:', config.output.filename);
 }
 
-module.exports = bundle;
 
-if (require.main === module) {
-    bundle(path.resolve(__dirname, "src/index.js"));
+function watchFiles() {
+    const watchPath = path.resolve(__dirname, 'src'); // Directory to watch
+
+    fs.watch(watchPath, { recursive: true }, (eventType, filename) => {
+        if (filename) {
+            console.log(`File changed: ${filename}. Rebuilding...`);
+            bundle(config.entry); // Re-bundle on change
+        }
+    });
 }
+
+bundle(config.entry).then(() => {
+    console.log('Initial bundling complete. Watching for changes...');
+    if (config.watch.enabled) {
+        watchFiles();
+    }
+}).catch(err => {
+    console.error('Error during bundling:', err);
+});
