@@ -1,1 +1,1 @@
-"use strict";var greeting="Hello, Team! Most Welcome. hey ";console.log(greeting);
+"use strict";var greeting="Hello, Team! Most Welcome ";console.log(greeting);
